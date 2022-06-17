@@ -21,11 +21,19 @@ const gameResults = [
   "Paper covers rock, you win!",
 ];
 
-let computerSelection =
-  gameOptions[Math.floor(Math.random() * gameOptions.length)];
-let userInput = prompt("Choose Rock, Paper or Scissors?");
-let playerSelection = userInput.toLowerCase();
 let roundResult;
+let playerScore = 0;
+let computerScore = 0;
+
+function computerSelection() {
+  computerPlay = gameOptions[Math.floor(Math.random() * gameOptions.length)];
+  return computerPlay;
+}
+
+function playerSelection() {
+  userPlay = (prompt("Choose: Rock, Paper or Scissors?") || "").toLowerCase();
+  return userPlay;
+}
 
 function playRound(computerSelection, playerSelection) {
   if (computerSelection === playerSelection) {
@@ -35,18 +43,67 @@ function playRound(computerSelection, playerSelection) {
     playerSelection === gameOptions[2]
   ) {
     roundResult = 1;
+    computerScore += 1;
   } else if (
     computerSelection === gameOptions[2] &&
     playerSelection === gameOptions[1]
   ) {
     roundResult = 3;
+    computerScore += 1;
+  } else if (
+    computerSelection === gameOptions[1] &&
+    playerSelection === gameOptions[0]
+  ) {
+    roundResult = 5;
+    computerScore += 1;
+  } else if (
+    playerSelection === gameOptions[0] &&
+    computerSelection === gameOptions[2]
+  ) {
+    roundResult = 2;
+    playerScore += 1;
+  } else if (
+    playerSelection === gameOptions[2] &&
+    computerSelection === gameOptions[1]
+  ) {
+    roundResult = 4;
+    playerScore += 1;
+  } else if (
+    playerSelection === gameOptions[1] &&
+    computerSelection === gameOptions[0]
+  ) {
+    roundResult = 6;
+    playerScore += 1;
   } else {
-    console.log("just testing");
+    console.log("You didn't enter an option");
+    return;
   }
+
   console.log(gameResults[roundResult]);
+  console.log(`The computer score is: ${computerScore}`);
+  console.log(`Your score is: ${playerScore}`);
 }
 
-playRound();
+function game() {
+  for (let i = 0; i < 5; i++) {
+    playRound(computerSelection(), playerSelection());
+    console.log(`The computer chose: ${computerPlay}`);
+    console.log(`You chose: ${userPlay}`);
+  }
+  console.log(winCondition());
+}
+
+function winCondition() {
+  if (computerScore > playerScore) {
+    return "Computer Wins";
+  } else if (playerScore > computerScore) {
+    return "You win";
+  } else {
+    return "its a tie";
+  }
+}
+
+game();
 
 // Rock crushes scissors, you lose!
 // Rock crushes scissors, you win!
